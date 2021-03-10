@@ -12,12 +12,19 @@ import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
+const path = require('path')
+const fs = require('fs-jetpack');
 const Web3 = require('web3');
 let web3 = new Web3();
 const bip39 = require('bip39');
 const hdkey = require('ethereumjs-wallet/dist/hdkey').default;
 const util = require('ethereumjs-util');
 const ethers = require('ethers');
+const walletList = ['ETH','BTC','ATOM','EOS','TRX','CKB','BCH','LTC','KSM','DOT','FIL','XTZ']
+console.log(fs,'fs')
+console.log(path, 'path')
+const walletCreateList = fs.readdirSync(path.resolve(__dirname,'./utils/wallet/create'))
+console.log(walletCreateList,'walletCreateList')
 function formatJson(filterVal, jsonData){
   return jsonData.map(v => filterVal.map(j => v[j]))
 }
@@ -53,7 +60,6 @@ function createWallet(password){
   }
   return form
 }
-const walletList = ['ETH','BTC','ATOM','EOS','TRX','CKB','BCH','LTC','KSM','DOT','FIL','XTZ']
 function App() {
   const [walletType, setWalletType] = useState(walletList[0]);
   const handleChange = (event) => {
