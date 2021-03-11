@@ -10,7 +10,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
-import Button from '@material-ui/core/Button';
+import Button from './components/Button';
 import Slider from './components/Slider'
 import {createBTCWallet, createETHWallet} from './utils/wallet/create'
 const walletList = ['ETH','BTC']
@@ -21,6 +21,7 @@ const createWalletList = {
 function App() {
   const [walletType, setWalletType] = useState(walletList[0]);
   const [count, setCount] = useState(10);
+  const [currentCount, setCurrentCount] = useState(0);
   const [loading, setLoading] = useState(false)
   async function create(){
     if (!count || count <= 0){
@@ -32,6 +33,7 @@ function App() {
     let arr = [];
     for (let z = 0; z<count;z++){
       arr.push(await createWallet());
+      setCurrentCount(z)
     }
     if (!arr.length){
       setLoading(false)
@@ -60,12 +62,8 @@ function App() {
           <Slider onChange={setCount} />
         </Box>
       </Grid>
-      <Button variant="contained" color="primary" onClick={create} disabled={loading}>
-        {
-          loading ? '生成导出中，':'生成'
-        }
-      </Button>
-      <p>注意：单次不要超过200个账户生成</p>
+      <Button onClick={create} total={count} currentCount={currentCount}/>
+      <p>生成账号为本地计算生成，因此单次生成最大建议200个。</p>
     </Container>
   );
 }
