@@ -12,7 +12,10 @@ import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import Button from './components/Button';
 import Slider from './components/Slider'
+import SourceCode from './components/SourceCode'
+import Reward from './components/Reward'
 import {createBTCWallet, createETHWallet} from './utils/wallet/create'
+
 const walletList = ['ETH','BTC']
 const createWalletList = {
   createBTCWallet,
@@ -44,26 +47,32 @@ function App() {
   }
   return (
     <Container className="App">
-      <FormControl component="fieldset">
-        <FormLabel component="legend">身份钱包</FormLabel>
-        <RadioGroup className="flex-row justify-center" aria-label="gender" name="gender1" value={walletType} onChange={(event)=>setWalletType(event.target.value)}>
-          {
-            walletList.map(item=>{
-              return (
-                  <FormControlLabel key={item} value={item} control={<Radio />} label={item} />
-              )
-            })
-          }
-        </RadioGroup>
-      </FormControl>
-      <Grid container justify="center" direction="column" alignItems="center">
-        <Box component="span" m={1}>
-          <FormLabel component="legend">生成数量</FormLabel>
-          <Slider onChange={setCount} />
-        </Box>
+      <Grid container>
+        <Grid item xs={12} sm={12} md={6}>
+          <FormControl component="fieldset">
+            <FormLabel component="legend">身份钱包</FormLabel>
+            <RadioGroup className="flex-row justify-center" aria-label="gender" name="gender1" value={walletType} onChange={(event)=>setWalletType(event.target.value)}>
+              {
+                walletList.map(item=>{
+                  return (
+                      <FormControlLabel key={item} value={item} control={<Radio />} label={item} />
+                  )
+                })
+              }
+            </RadioGroup>
+          </FormControl>
+          <Grid container justify="center" direction="column" alignItems="center">
+            <Box component="span" m={1}>
+              <FormLabel component="legend">生成数量</FormLabel>
+              <Slider onChange={setCount} />
+            </Box>
+          </Grid>
+          <Button onClick={create} total={count} currentCount={currentCount}/>
+          <p>生成账号为本地计算生成，因此单次生成最大建议200个。</p>
+          <Reward />
+        </Grid>
+          <SourceCode walletType={walletType} />
       </Grid>
-      <Button onClick={create} total={count} currentCount={currentCount}/>
-      <p>生成账号为本地计算生成，因此单次生成最大建议200个。</p>
     </Container>
   );
 }
