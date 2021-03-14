@@ -1,23 +1,58 @@
 import React from 'react';
 import {Grid} from "@material-ui/core";
+import classnames from 'classnames'
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
-import InboxIcon from '@material-ui/icons/Inbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
+import QRCode from 'qrcode.react';
+import ClipboardJS from 'clipboard'
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
-        maxWidth: 360,
+        maxWidth:"100%",
         backgroundColor: theme.palette.background.paper,
+        marginTop: 20
     },
     icon: {
         width: '30px',
+    },
+    address: {
+        width:400,
+        flexShrink: 0,
+        fontSize: 18,
+
+    },
+    QRCode: {
+      display: 'none',
+      position: 'absolute',
+        zIndex: 123
+    },
+    qrCode: {
+        position: 'relative',
+        '& img': {
+            cursor: 'pointer',
+            width: 30,
+            margin: '0 10px'
+        },
+        '&:hover': {
+            "& .qrcode": {
+                display:'block'
+            }
+        }
+    },
+    copy: {
+        cursor: 'pointer',
+        width:20
     }
 }));
 const rewardList = [
@@ -36,7 +71,7 @@ const rewardList = [
         address: '0x1DE7C0DEfEAB103Aad3dc72156410A7489af54E0',
         icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAD/UlEQVRYR8WXX2xTdRTHv+d3124Ctysoi8MYRKIJEWRGzUK23U4fNCbzhWSIuyWbJk5iImo0+sCzTyJB1MTFRKpbQTFZYsAYI8i8lQV1REdEYogErSBGZ9t7O3Tt7u+Y263Qdre9nevkPjX9fc85n9855/ePUOW3qZuv8/vSXQypgWgjgDVgrARBAVECLOMEOsVAjP10KLZP/aMa1+Ql6txmrbcl7yBQL8B+L31+nIAhwcqeY/uXnqxkUxFA05O7APF8tUHddbTHiKrPlfPhCnBfr3WHbXMEjHsWFnzWmjHGRL2xqPpDqb85AB262UbgwwAFaxL8qpMJAe4aiTaeKPRbBKDp6Q2ANADUOng+5gQEdRiD6pmCXpn52d19UPm9/qFvwHxXfvCxzVX3XMVk7RvOFI5/bUQDrXMAQrq1l8FPFypf27kELeuUBVUiMjyFEgAw5CuxaPBFx3GuBO3bUq1CUlFtnP8XC8Dxbcvs+uMHrj+dAwiFrQPMvLV0qosJANCAEVW3U0d4spnYvuiW50rpd+AKv2devly2VN+dseeOMaaEXw1SqMfqZ+KB+Rb6iyG1yCQUtubrAgzqppBuDjIQ9rJuVAk33iCwIkhYHiC89ERDkcnA+1OwJhnmJOPHcxKX/pReLsHg10nrMcdBuNNN/fD9PjzQ5sPwZxkkTcYvFyUmkpxbGaUlKMxAUKUcaP8j9TgyOo0jo9lyMAZpeirhtus5KT70eRa73vlnjrEXQKGBs5f0ba53Gt0FguKk6Sa74XW21uHBdl8u3R8dzeKnuETKZCQtiXVrFdx6s4K/UjNpblohcPCTDOr9gFOq5QGB1TcJ7NzegJGvpvHpl1mMfjvt2ohlAfLqJQ2E224RuH2NgtXNAs1NAquaCMyAmZ5hDywjSAnEL0nEf5M4f0Hi7HkbZ3/26APGlAOQ+C97fy1WAYBfSQtb42B2bcJKbVwjgJgDMARm3XPNlAhqAsD8hgPwJJjfuhYAxLSF2rZOrlIU+8I1AMhmM2pj7jDS9NQHAG2ZD8RCS8DA27FooH/mNHzU3MQCo/8ngBC0YWRQ/f7KlUzTU28C9FS1EAvMwKtGNPCCE+sKwN397Ft62RoDu58LpWB9Jde1SPG1q/w8CGPGUODevKDoUtrZk2iRJAyAis/aatPirUsqddR+7F31tCtArh/CZgczf7wIEEkGumLRwPFCTteHSXs4sVGwiADU4j0pbwWBTpJAn9N0peoKTzMmTU/vBvhZ7xDlFczYHdsfKPu8836c9qRbbMgdBPSBrjatB5QNQoSF2Bt7b9mpSlpPgLxx2+Os1mUmu5htDZh9ngMrZ8edp/g5Zh4HhKFk/z488mFTuprM/Qv9GI3dQ1nIygAAAABJRU5ErkJggg=='
     },
-    {
+  /*  {
         name: 'ATOM',
         address: 'cosmos1zz8vjcacr28ykhfg7k5vk0d2mmfj6pg2qau9th',
         icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAExUlEQVRYR8VXa2wUVRT+7uxOd6EvWF6iwbcWH2xp4AcR2i3GAMG0YrSioKZRmqClURJNSCWSGIwiGE1qRSM/fJK2QKMQW0QQtljTKLqwNpISpEUD0rTdht0tdF8z5tztnc7uzmwXrOn5s7Nz7znnu+d859wzDBnKgod8+dEIK1dV5REwdjuAaQCmj6j3AxiAijOMKY3DUfVwV/uMQCam2Vib7i/pv0diUg2ANQDyx9o/sj4IoEFRlbrOtumn0+mkBeAs9W1lKmpUIC9DxwnbGOBXGeq8xxybzfRNARS6BptUqBXX49hA57jX7SgxsmUIwOnydQO4dZycCzP9XrdjRrLNFABOl69PRy6+PzeHoWx5Fn8+dz6Gwvus+N4dwbmeWIK9G2+QULpY5u8OfBdGIKgm++vxuh236V8mAHC6fG0AipO13tg0GV1nY+gbUPBWrR291ZVw7PgErooQQqG4k7WP27B0iYyv9oZAQArutOD1t6+kBJGB7TnlnvqEWNAAEOGg4jWjsDfuysXqdQHMuUnCpvnfYranCVJ5FWoOLMHfFxQQQDrt9g+uaupCxzCNDG8KYnIAVGoWJnWYsX3X+zlY93KQ2/ppdwixgV7Y585D65EIf3fiZBT7D4YTfOl1DPLuj6nKIipRDsDp8n0I4AUz0pkZo5OTGIU6HYARPzu9bseLrGBxX67NajkPYKoZAHL00afDuHhJ0bZQvstXxIlJeacoCCEOrK+0GwLT+bgsy7iFFbr6H1UhNZs5p/fCkQgzVYX+hOJZsD55v5ltBvYsc5b4GsCw2mwTsZlKi4xSBBgDFhRa8eup0ROTrv7d7FkS58Sx9givHlNR1X3M6fL9BqBIv4lOuOYxGx4slrkBCi8BoFxTeMWzXofSRE4JpHheON/Ky/GH4xHs3hcy6gseAkD5v1kYIwUyQHnVM5tyTmv0SxUxFGmBZGtB9uRJCAwuRba8kqfl6I/xU9OvEAJMfYIOkBSRvwjAEIA4nQG8tzWbE84odC0NeRwUrVtyN4AxhkVF8/B711lcvvQOJx45W/mkPyXqBJ7WN24md5pcuS4AO79ogsV+EJLFolmK+utSALgekLF8WjtOWorxZ3cMT1fYDAEYpuDLPSHez4UkpyAYfhcK/oDVZocSvhc5cjWPHvFFpODnQ/nwVm/EzGXLIJeswPMvBRNKGQBPgSEJRW//xRPlRun/lm3JJAwAUhegLNSIJ0j4TWsYqzpWQZYk5JQ9h/qeh3GkbZQXIwfzZFSGoumQcaqQu++wJDQeMkaMp5MHh1ReKcSVcBhYX2lD67b92N5RytcShMowk0ZU+ZQNigJ83hji+uPaiMZqxScOT0GvtxuOgjmoeuUqOk/HGwudmNJCktyKifGi7My7EOKtmDaku4yaa8/A2lwPOSsLXxfV4ePPhjWb43IZkbV017Hn6BR0Vj0DeeYs1F7cok1BVO8UBZL/fB3zKKQZSA7tzUPZ2oA2/by6YRLngbiGKRL+gIod9aMDSdrrOHkgETE1G8nI4YV/FF7D1EyozVLe9SLKlvoHVcHcu65xJNOBSBlKaU0Qjpzr5wI9CHJMJUtCZXjNQ6kOxMSN5QLEhH6YaJGYyE8zAWJCP071BPu/Ps//BStJiw+qUXS+AAAAAElFTkSuQmCC'
@@ -71,34 +106,87 @@ const rewardList = [
         address: '14V7aTcYe46SYPwVrjboduoofyBKu3E44rZbYTBdpBMvMrZy',
         icon: 'data:image/png;base64,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'
     },
-    // {
-    //     name: 'FIL',
-    //     address: 'f1ir7z37hgon6kl2mhg6dpmovozs42rcpvzwwbsqy',
-    //
-    // },
+    {
+        name: 'FIL',
+        address: 'f1ir7z37hgon6kl2mhg6dpmovozs42rcpvzwwbsqy',
+    },
     {
         name: 'XTZ',
         address: 'tz1fkcTAZrhtvToEnWCBoqCzD8zf6ayDotTc',
         icon: 'data:image/png;base64,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'
     }
+    */
 ]
 const qrcode = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAC/ElEQVRYR+1XsW4TQRB9s+d8B0aiJ38Q09npU1FwaZASgZQq2FWcyoYGJIINFU5Nkwq7i/0BSOYDIkJNQx/fDpo91mx29467KIgmV9m3u7Nv38x7O0fpODsCqIXYw3o02W98io5VfJmOVjsgtR+dTvoHpWN9DmTHsQmTvY15xX1Kp6Xjq/gBoc7XAG5rs6qAc1B3AAoY6AyzNwA/LKaTvk67ycH2K96UOZ8PadkerFIiPClLwbTbeGTHS1PQGazmUHTGWi/9gASVAtyc9hotMw+A/N4eZH0Gmgw9CdYotQnG62k3oRDAaLXjS00CM7g/623M24M/FSz/8424FQNg2OglfXeN3ZBInbsA5L1YwBqRi9oF0BlmbMckwDUAJlWASccg61sAnaFIm430mLWhPQbAvI/lrCoAd+1/AeDXwD9hwGfITYFUvozPeo2Jy4C/RmqidgqI6JsmXAYVzdwCg6QIfQBMvMVEgX0rFnUg9YuwsAYksAI1izStwZdyajcFckoFVeD5eSRRSCjrquZdMs9snjR+iiHVDRdXQcQJmXFqTm0kJtJTa1czUmVeSFpkzPeOMoDFADi3WfswMKkCwPUN8QAxLx+gGzcKoC6N7gbtl9LgAMToWwC1GRBJaYW1AwaAtF6sbVqpLdK4z+C5MGRTILKzAMoOVJQCBuOUEMpQ7gECzaWijScQjvyNwhpYpVB0b/YiCTqvQgBF6F3DsQAImGjmhWXAP7GRK9FWZR+QnLqXiA1oLyOraQvAjDsqqFNDpQyYYiJlZJdLL78NfQA+W78PcDzrbZi5tVVQl4E1W0kjL1wtIGkJpc6mh7QoBSB9e9CQOClw6bQNSYwByxazNie36RHWigCk76760bZcFhBwwEqFLZnWKRjfXRUAWAJ8wcwnCvSACY+R3yVNgOfmw8erkb/3hCWVZF0xVoT26g2W1wFQp4pvOvfuw+QaA5RQ0ChwtqLb+l4s/TjdfZ99YMbTWC4JeP5xLzm5aZ5l3e44e8bA24IYX34BDJvL5H/qFHAAAAAASUVORK5CYII=';
 export default function Reward() {
     const classes = useStyles();
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [openMessageAlert, setOpenMessageAlert] = React.useState(false);
+    const handleClick = () => {
+        setOpenMessageAlert(true);
+    };
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpenMessageAlert(false);
+    };
+    const handlePopoverOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handlePopoverClose = () => {
+        setAnchorEl(null);
+    };
+    const open = Boolean(anchorEl);
+    const clipboard = new ClipboardJS('.copyBtn');
+    clipboard.on('success', function(e) {
+        handleClick()
+    });
+    clipboard.on('error', function(e) {
+    });
     return (
         <div className={classes.root}>
+            <Snackbar
+                open={openMessageAlert}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                autoHideDuration={1000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success">
+                    Copy success
+                </Alert>
+            </Snackbar>
             <p>如果你觉得这个工具帮到你了，</p>
             <List component="nav" aria-label="main mailbox folders">
                 {
                     rewardList.map(item=>{
                         return (
-                            <ListItem >
+                            <ListItem key={item.name}>
                                 <ListItemIcon>
                                     <img className={classes.icon} src={item.icon} alt=""/>
                                 </ListItemIcon>
-                                <ListItemText primary={item.address} />
+                                <ListItemText className={classes.address} primary={item.address} />
                                 <ListItemIcon>
-                                    <img src={qrcode} alt=""/>
+                                    <FileCopyIcon className={classnames('copyBtn', classes.copy)} data-clipboard-text={item.address} />
+                                    <p className={classes.qrCode}>
+                                        <img src={qrcode}
+                                             alt=""
+                                             onMouseEnter={handlePopoverOpen}
+                                             onMouseLeave={handlePopoverClose}
+                                        />
+                                        <QRCode
+                                                className={classnames('qrcode', classes.QRCode)}
+                                                value={item.address}
+                                                size={100}
+                                                imageSettings={{
+                                                    src: item.icon,
+                                                    x: null,
+                                                    y: null,
+                                                    height: 24,
+                                                    width: 24,
+                                                    excavate: true,
+                                                }}
+                                        />
+                                    </p>
                                 </ListItemIcon>
                             </ListItem>
                         )

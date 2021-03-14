@@ -10,7 +10,7 @@ export default function CreateButton({loading,currentCount, total,onClick}){
     return (
         <LoadingButton variant="contained" color="primary" onClick={onClick} disabled={loading}>
             {
-                loading ? `生成导出中，${currentCount}/${total}`:'生成'
+                loading ? `生成中，${currentCount}/${total},生成完成后自动导出`:'生成'
             }
         </LoadingButton>
     )

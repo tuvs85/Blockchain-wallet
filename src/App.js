@@ -3,6 +3,7 @@ import './App.css';
 import ExportToExcel from './utils/ExportToExcel'
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import MuiAlert from '@material-ui/lab/Alert';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -14,8 +15,11 @@ import Button from './components/Button';
 import Slider from './components/Slider'
 import SourceCode from './components/SourceCode'
 import Reward from './components/Reward'
+import SessionStorageData from './components/SessionStorageData'
 import {createBTCWallet, createETHWallet} from './utils/wallet/create'
-
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 const walletList = ['ETH','BTC']
 const createWalletList = {
   createBTCWallet,
@@ -23,6 +27,8 @@ const createWalletList = {
 }
 function App() {
   const [walletType, setWalletType] = useState(walletList[0]);
+  const [currentAccounts, setCurrentAccounts] = useState(undefined);
+  const [frequency, setFrequency] = useState(1);
   const [count, setCount] = useState(10);
   const [currentCount, setCurrentCount] = useState(0);
   const [loading, setLoading] = useState(false)
@@ -42,12 +48,16 @@ function App() {
       setLoading(false)
       return
     }
-    await ExportToExcel(arr,walletType)
+    let name = `${walletType}-${count}-${frequency}`;
+    await ExportToExcel(arr,name);
+    setCurrentAccounts({data: arr, name,createTime: Date.now()})
+    const _frequency = frequency + 1
+    setFrequency(_frequency)
     setLoading(false)
   }
   return (
     <Container className="App">
-      <Grid container>
+      <Grid container spacing={2}>
         <Grid item xs={12} sm={12} md={6}>
           <FormControl component="fieldset">
             <FormLabel component="legend">身份钱包</FormLabel>
@@ -67,8 +77,11 @@ function App() {
               <Slider onChange={setCount} />
             </Box>
           </Grid>
-          <Button onClick={create} total={count} currentCount={currentCount}/>
-          <p>生成账号为本地计算生成，因此单次生成最大建议200个。</p>
+          <Button loading={loading} onClick={create} total={count} currentCount={currentCount}/>
+          <Alert style={{margin: '20px'}} severity="warning">
+            <p>生成账号为本地计算生成，因此单次生成最大建议200个。</p>
+          </Alert>
+          <SessionStorageData data={currentAccounts} download={ExportToExcel} />
           <Reward />
         </Grid>
           <SourceCode walletType={walletType} />

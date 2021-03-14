@@ -42,7 +42,7 @@ export default function SourceCode({walletType}){
         <Grid item xs={12} sm={12} md={6}>
             <a href="https://github.com/tuvs85/Blockchain-wallet" target="_blank" className={classes.alert}>
                 <Alert className={classes.alert} severity="success" icon={<GitHubIcon />}>
-                    <p>本程序代码完全开源，</p>
+                    <p>本程序代码完全开源，点击查看GitHub仓库完整源码</p>
                 </Alert>
             </a>
             <h3>当前 {walletType} 钱包创建源码</h3>

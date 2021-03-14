@@ -1,7 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
 import Slider from '@material-ui/core/Slider';
+import Input from '@material-ui/core/Input';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,23 +43,32 @@ const marks = [
 function valuetext(value) {
     return `${value}`;
 }
-export default function DiscreteSlider({onChange}) {
+export default function DiscreteSlider({onChange, value}) {
     const classes = useStyles();
     const handleChange = (event, newValue) => {
         onChange(newValue);
     };
+    // const handleInputChange = (event) => {
+    //     onChange(event.target.value === '' ? '' : Number(event.target.value));
+    // };
     return (
-        <Slider
-            className={classes.root}
-            min={10}
-            defaultValue={10}
-            getAriaValueText={valuetext}
-            onChange={handleChange}
-            aria-labelledby="discrete-slider-custom"
-            step={10}
-            max={200}
-            valueLabelDisplay="auto"
-            marks={marks}
-        />
+       <>
+           <Grid container spacing={2} alignItems="center">
+               <Grid item xs>
+                   <Slider
+                       className={classes.root}
+                       min={10}
+                       defaultValue={10}
+                       getAriaValueText={valuetext}
+                       onChange={handleChange}
+                       aria-labelledby="discrete-slider-custom"
+                       step={10}
+                       max={200}
+                       valueLabelDisplay="auto"
+                       marks={marks}
+                   />
+               </Grid>
+           </Grid>
+       </>
     );
 }
