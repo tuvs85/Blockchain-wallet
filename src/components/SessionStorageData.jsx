@@ -21,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'space-between',
         padding: 10,
         alignItems: 'center'
+    },
+    tips: {
+        padding: 10
     }
 }));
 export default function SessionStorageData({data, download}){
@@ -39,7 +42,7 @@ export default function SessionStorageData({data, download}){
     }
     return (
             <TableContainer component={Paper}>
-                <p>文件数据只进行当前页面缓存，刷新会丢失，请确保你已保存你的创建数据</p>
+                <p className={classes.tips}>文件数据只进行当前页面缓存，刷新后丢失</p>
                 <Table className={classes.table} aria-label="simple table">
                     <TableHead>
                         <TableRow>

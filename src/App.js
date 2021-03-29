@@ -17,6 +17,11 @@ import SourceCode from './components/SourceCode'
 import Reward from './components/Reward'
 import SessionStorageData from './components/SessionStorageData'
 import {createBTCWallet, createETHWallet} from './utils/wallet/create'
+import withStyles from "@material-ui/core/styles/withStyles";
+const WalletContainer = withStyles({
+  height: '100%',
+  width: '100%'
+})(Container)
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -37,7 +42,7 @@ function App() {
       alert('请输入有效数量')
       return;
     }
-    setLoading(true);
+    setLoading(!loading);
     const createWallet = createWalletList[`create${walletType}Wallet`]
     let arr = [];
     for (let z = 0; z<count;z++){
@@ -45,7 +50,7 @@ function App() {
       setCurrentCount(z)
     }
     if (!arr.length){
-      setLoading(false)
+      setLoading(!loading)
       return
     }
     let name = `${walletType}-${count}-${frequency}`;
@@ -56,7 +61,7 @@ function App() {
     setLoading(false)
   }
   return (
-    <Container className="App">
+    <WalletContainer className="App">
       <Grid container spacing={2}>
         <Grid item xs={12} sm={12} md={6}>
           <FormControl component="fieldset">
@@ -74,7 +79,7 @@ function App() {
           <Grid container justify="center" direction="column" alignItems="center">
             <Box component="span" m={1}>
               <FormLabel component="legend">生成数量</FormLabel>
-              <Slider onChange={setCount} />
+              <Slider onChange={setCount} type={walletType} />
             </Box>
           </Grid>
           <Button loading={loading} onClick={create} total={count} currentCount={currentCount}/>
@@ -86,7 +91,7 @@ function App() {
         </Grid>
           <SourceCode walletType={walletType} />
       </Grid>
-    </Container>
+    </WalletContainer>
   );
 }
 

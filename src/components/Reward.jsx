@@ -11,12 +11,19 @@ import ClipboardJS from 'clipboard'
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
-
 const useStyles = makeStyles((theme) => ({
+    heading: {
+        fontSize: theme.typography.pxToRem(15),
+        fontWeight: theme.typography.fontWeightRegular,
+    },
     root: {
         width: '100%',
         maxWidth:"100%",
@@ -25,30 +32,13 @@ const useStyles = makeStyles((theme) => ({
     },
     icon: {
         width: '30px',
+        marginRight: 10
     },
     address: {
         width:400,
         flexShrink: 0,
         fontSize: 18,
 
-    },
-    QRCode: {
-      display: 'none',
-      position: 'absolute',
-        zIndex: 123
-    },
-    qrCode: {
-        position: 'relative',
-        '& img': {
-            cursor: 'pointer',
-            width: 30,
-            margin: '0 10px'
-        },
-        '&:hover': {
-            "& .qrcode": {
-                display:'block'
-            }
-        }
     },
     copy: {
         cursor: 'pointer',
@@ -161,33 +151,24 @@ export default function Reward() {
                     rewardList.map(item=>{
                         return (
                             <ListItem key={item.name}>
-                                <ListItemIcon>
-                                    <img className={classes.icon} src={item.icon} alt=""/>
-                                </ListItemIcon>
-                                <ListItemText className={classes.address} primary={item.address} />
-                                <ListItemIcon>
-                                    <FileCopyIcon className={classnames('copyBtn', classes.copy)} data-clipboard-text={item.address} />
-                                    <p className={classes.qrCode}>
-                                        <img src={qrcode}
-                                             alt=""
-                                             onMouseEnter={handlePopoverOpen}
-                                             onMouseLeave={handlePopoverClose}
-                                        />
+                                <Accordion style={{width: '100%'}}>
+                                    <AccordionSummary
+                                        expandIcon={<img src={qrcode} onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose}/>}
+                                        aria-controls="panel1a-content"
+                                        id="panel1a-header"
+                                    >
+                                        <img className={classes.icon} src={item.icon} alt=""/>
+                                        <ListItemText className={classes.address} primary={item.address} />
+                                        <FileCopyIcon className={classnames('copyBtn', classes.copy)} data-clipboard-text={item.address} />
+                                    </AccordionSummary>
+                                    <AccordionDetails>
                                         <QRCode
-                                                className={classnames('qrcode', classes.QRCode)}
-                                                value={item.address}
-                                                size={100}
-                                                imageSettings={{
-                                                    src: item.icon,
-                                                    x: null,
-                                                    y: null,
-                                                    height: 24,
-                                                    width: 24,
-                                                    excavate: true,
-                                                }}
+                                            className={classnames('qrcode', classes.QRCode)}
+                                            value={item.address}
+                                            size={100}
                                         />
-                                    </p>
-                                </ListItemIcon>
+                                    </AccordionDetails>
+                                </Accordion>
                             </ListItem>
                         )
                     })
