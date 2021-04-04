@@ -30,11 +30,12 @@ const createWalletList = {
   createBTCWallet,
   createETHWallet
 }
+let countArr = []
 function App() {
   const [walletType, setWalletType] = useState(walletList[0]);
   const [currentAccounts, setCurrentAccounts] = useState(undefined);
   const [frequency, setFrequency] = useState(1);
-  const [count, setCount] = useState(10);
+  const [count, setCount] = useState(1);
   const [currentCount, setCurrentCount] = useState(0);
   const [loading, setLoading] = useState(false)
   async function create(){
@@ -44,28 +45,41 @@ function App() {
     }
     setLoading(!loading);
     const createWallet = createWalletList[`create${walletType}Wallet`]
+    let createWalletTime = null;
     let arr = [];
-    for (let z = 0; z<count;z++){
-      arr.push(await createWallet());
-      setCurrentCount(z)
-    }
+    await handleCreateWallet(async ()=>{
+      let name = `${walletType}-${count}-${frequency}`;
+      await ExportToExcel(arr,name);
+      setCurrentAccounts({data: arr, name,createTime: Date.now()})
+      const _frequency = frequency + 1
+      setFrequency(_frequency)
+      setLoading(false)
+    })
     if (!arr.length){
       setLoading(!loading)
       return
     }
-    let name = `${walletType}-${count}-${frequency}`;
-    await ExportToExcel(arr,name);
-    setCurrentAccounts({data: arr, name,createTime: Date.now()})
-    const _frequency = frequency + 1
-    setFrequency(_frequency)
-    setLoading(false)
+    async function handleCreateWallet(callback){
+      clearTimeout(createWalletTime);
+      createWalletTime = setTimeout(async ()=>{
+        const result = await createWallet()
+        arr.push(result)
+        setCurrentCount(arr.length)
+        if (arr.length < count){
+          await handleCreateWallet(callback)
+        }else {
+          clearTimeout(createWalletTime);
+          callback()
+        }
+      },30)
+    }
   }
   return (
     <WalletContainer className="App">
       <Grid container spacing={2}>
         <Grid item xs={12} sm={12} md={6}>
           <FormControl component="fieldset">
-            <FormLabel component="legend">身份钱包</FormLabel>
+            <FormLabel component="legend">Identity Wallet</FormLabel>
             <RadioGroup className="flex-row justify-center" aria-label="gender" name="gender1" value={walletType} onChange={(event)=>setWalletType(event.target.value)}>
               {
                 walletList.map(item=>{
@@ -78,7 +92,7 @@ function App() {
           </FormControl>
           <Grid container justify="center" direction="column" alignItems="center">
             <Box component="span" m={1}>
-              <FormLabel component="legend">生成数量</FormLabel>
+              <FormLabel component="legend">Created Number</FormLabel>
               <Slider onChange={setCount} type={walletType} />
             </Box>
           </Grid>

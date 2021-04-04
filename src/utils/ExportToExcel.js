@@ -4,7 +4,7 @@ function formatJson(filterVal, jsonData){
     return jsonData.map(v => filterVal.map(j => v[j]))
 }
 export default async function ExportToExcel(arr,name, type = 'xlsx'){
-    const th = ['地址', '公钥', '私钥', '助记词']
+    const th = ['address', 'publicKey', 'privateKey', 'mnemonic']
     const filterVal = ['address', 'publicKey', 'privateKey', 'mnemonic']
     const data=formatJson(filterVal, arr);
     if (type === 'xlsx'){

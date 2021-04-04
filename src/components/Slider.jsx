@@ -16,6 +16,10 @@ const useStyles = makeStyles((theme) => ({
 
 const marks = [
     {
+        value: 1,
+        label: '1',
+    },
+    {
         value: 10,
         label: '10',
     },
@@ -57,12 +61,12 @@ export default function DiscreteSlider({onChange, value}) {
                <Grid item xs>
                    <Slider
                        className={classes.root}
-                       min={10}
-                       defaultValue={10}
+                       min={marks[0].value}
+                       defaultValue={marks[0].value}
                        getAriaValueText={valuetext}
                        onChange={handleChange}
                        aria-labelledby="discrete-slider-custom"
-                       step={10}
+                       step={1}
                        max={200}
                        valueLabelDisplay="auto"
                        marks={marks}
