@@ -1,0 +1,14 @@
+.sessionStorageDataRoot{
+    padding: 20px;
+    max-height: 300px;
+    overflow: auto;
+}
+.sessionStorageDataRow{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    align-items: center;
+}
+.sessionStorageDataTips{
+    padding: 10px
+}
