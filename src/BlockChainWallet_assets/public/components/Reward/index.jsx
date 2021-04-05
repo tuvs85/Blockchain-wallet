@@ -4,7 +4,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import QRCode from 'qrcode.react';
 import ClipboardJS from 'clipboard'
-import FileCopyIcon from '@material-ui/icons/FileCopy';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import Accordion from '@material-ui/core/Accordion';
@@ -17,7 +16,7 @@ function Alert(props) {
 const rewardList = [
     {
         name: 'ETH',
-        address: '0x1DE7C0DEfEAB103Aad3dc72156410A7489af54E0',
+        address: '0x18796AD54e7393F90ae64e9fFA1A2ba6C3999999',
         icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAwFBMVEUAAAA+W/M+W/I+W/I9WvI9WvI+W/I/W/JAWvM/Xu0+W/I+W/I+W/M+W/I/WvI+W/M+W/M9W/I9W/I+W/E+XPE/XfQ+W/I+W/I+WvA+XPQ+W/I+W/M+W/NVVf8+W/L///9MZ/PO1fysuPpgefRGYvOotfmImvft8P7By/uXp/iMnfeElvd3i/ZSbPPy9P7o6/3R2PzJ0fvGz/u2wfpsg/VpgPXv8f7k6P27xfqisPmgr/mSoviAk/ZwhvVnfvVWcPQeedxXAAAAHnRSTlMA/M7tLvmcjSsL8cWVkjvlpaFkWTUX58tWL9rPwQPztfPfAAABQklEQVQ4y32T53bCMAyF5SQEwt6jI8oi7LK7x/u/VRsgusac0++XdK/s2JJDwBvWHhoFZVutdo9uKbkFHzS7pl/0DWrXywf+DVYJft0WOQgktOuyHr4fRYjtfA8L2oH5gGxw9ms+CJlDLS1mflcT5vzHXBMcImoiDSZZwSSA4hL1fBDxiQhKwaM2siNfOEIbUgvJNi/YQqtqd0xZSEWskDQpWaNgneRqg1QejlljLKeUgtVVQRpLwd0lUotlmNuvyUw+gUN+7eLZ06lRy2UY45C45ju/JXvm8SriGa6pN2rDL5/fcfqsz6ujtzpm5umGmX9EUt7VsD6YjXG6xrinmb/Tx208mFV2jcB4MPR4D2XBvEBm0RmnDG0/RVx25NmjIgng10lwMHTs7/z/6xXJYOQquMod0S1ep1rpK9WvVDse1F8dnV/jvIBkVwAAAABJRU5ErkJggg=='
     },
     {
@@ -27,7 +26,7 @@ const rewardList = [
     },
     {
         name: 'USDT',
-        address: '0x1DE7C0DEfEAB103Aad3dc72156410A7489af54E0',
+        address: '0x18796AD54e7393F90ae64e9fFA1A2ba6C3999999',
         icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAArlBMVEUAAAA/XPM+WvI+W/I+W/M+WvI+W/I+W/I+WvQ+W/I+W/I9W/M7Wfo+W/M+W/M+W/I9WvI/W/M8XPU+W/E+W/I+W/I+XPM+W/M9WvI9W/A+W/M7Yv8+W/M+W/E+W/I/XPI+W/L///+frfhuhPV+kvbQ1/zH0Pxke/VUbfTk6P3W3PySo/iImvdGYvOyvfqLnfeDlvd3jPZNaPPl6f2/yPuotfmYp/hvhfVtg/VgePR6kOT7AAAAIHRSTlMAK5Tv+/jLw1YvoZoK7NHOOjYY8ufjpo+Ni2YG4qliPeMq+gAAAAEfSURBVDjLhZPXdoMwDEAV9gokNKNpOhQgbDK6+/8/1qo64AaIe1+wpYslODIIPEsxl7o2DZzHEIZMXB0Fzhx6bLDH+vJ1AwcYE5GfqTjCtCtjc35otGcEP5toAFXhvEL2ftcjouiG8nO8LiAVWckEFyDkhmKGUjGDhL6FO/wLCRcBC5xu/ZydaxLej0neBRXweXHcJx85/pYg9ys9cdwElY8+cCeiRMTPe+BtkpZ1ljdxlSQVNnl22r2euUtoizWf1SF9KcqyKNK3OqMQC6r8K5bgywUTVnJB+f9HhVJB8wAeZIJL8yYTJjwwV4VbILa+iPCstRjA2Dc4itoN/tOooc6gww4kF4dZt3HRXw/bQYHm2tCHr/9C0xamYnki+g05VGUEG0aKCwAAAABJRU5ErkJggg=='
     },
     {
@@ -123,7 +122,7 @@ export default function Index() {
                 {
                     rewardList.map(item=>{
                         return (
-                            <ListItem key={item.name}>
+                            <ListItem key={item.name} className="copyBtn" data-clipboard-text={item.address}>
                                 <Accordion style={{width: '100%'}}>
                                     <AccordionSummary
                                         expandIcon={<img src={qrcode} onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose}/>}
@@ -132,7 +131,6 @@ export default function Index() {
                                     >
                                         <img className="rewardIcon" src={item.icon} alt=""/>
                                         <ListItemText className="rewardAddress" primary={item.address} />
-                                        <FileCopyIcon className='copyBtn rewardCopy' data-clipboard-text={item.address} />
                                     </AccordionSummary>
                                     <AccordionDetails>
                                         <QRCode

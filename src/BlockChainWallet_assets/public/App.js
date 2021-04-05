@@ -3,24 +3,17 @@ import './App.css';
 import ExportToExcel from './utils/ExportToExcel'
 import Grid from '@material-ui/core/Grid';
 import MuiAlert from '@material-ui/lab/Alert';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import Box from '@material-ui/core/Box';
 import Button from './components/Button';
-import Slider from './components/Slider'
-import SourceCode from './components/SourceCode'
+import Footer from './components/Footer'
 import Reward from './components/Reward'
 import SessionStorageData from './components/SessionStorageData'
-import {createBTCWallet, createETHWallet} from './utils/wallet/create'
+// import {createBTCWallet, createETHWallet} from './utils/wallet/create'
+import {createETHWallet} from './utils/wallet/create'
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
-const walletList = ['ETH','BTC']
+const walletList = ['ETH']
 const createWalletList = {
-  createBTCWallet,
   createETHWallet
 }
 function App() {
@@ -68,35 +61,23 @@ function App() {
   }
   return (
     <div className="App">
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={12} md={6}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Identity Wallet</FormLabel>
-            <RadioGroup className="flex-row justify-center" aria-label="gender" name="gender1" value={walletType} onChange={(event)=>setWalletType(event.target.value)}>
-              {
-                walletList.map(item=>{
-                  return (
-                      <FormControlLabel key={item} value={item} control={<Radio />} label={item} />
-                  )
-                })
-              }
-            </RadioGroup>
-          </FormControl>
-          <Grid container justify="center" direction="column" alignItems="center">
-            <Box component="span" m={1}>
-              <FormLabel component="legend">Created Number</FormLabel>
-              <Slider onChange={setCount} type={walletType} />
-            </Box>
-          </Grid>
-          <Button loading={loading} onClick={create} total={count} currentCount={currentCount}/>
-          <Alert style={{margin: '20px'}} severity="warning">
-            <p>生成账号为本地计算生成，因此单次生成最大建议200个。</p>
-          </Alert>
-          <SessionStorageData data={currentAccounts} download={ExportToExcel} />
-          <Reward />
+      <Grid item xs={12} sm={12} md={12}>
+        <h1 className="title">{walletList[0]} Identity Wallet </h1>
+        <hr/>
+        <Grid container justify="center" direction="column" alignItems="center">
+          <div>
+            <label>Created Number</label>
+            <input type="text" onChange={(e)=>{setCount(e.target.value)}} value={count}/>
+          </div>
         </Grid>
-          <SourceCode walletType={walletType} />
+        <Button loading={loading} onClick={create} total={count} currentCount={currentCount}/>
+        <Alert style={{margin: '20px'}} severity="warning">
+          <p>生成账号为本地计算生成，因此单次生成最大建议200个。</p>
+        </Alert>
+        <SessionStorageData data={currentAccounts} download={ExportToExcel} />
+        <Reward />
       </Grid>
+      <Footer />
     </div>
   );
 }

@@ -2,7 +2,8 @@ const path = require("path");
 const TerserPlugin = require("terser-webpack-plugin");
 const dfxJson = require("./dfx.json");
 // const webpack = require('webpack')
-// const CopyWebpackPlugin = require('copy-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const UglifyJsPlugin=require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 // List of all aliases for canisters. This creates the module alias for
@@ -44,7 +45,24 @@ function generateWebpackConfigForCanister(name, info) {
     },
     optimization: {
       minimize: true,
-      minimizer: [new TerserPlugin()]
+      minimizer: [new TerserPlugin({
+        terserOptions: {
+          ecma: undefined,
+          warnings: false,
+          parse: {},
+          compress: {
+            drop_console: true,
+            drop_debugger: false,
+            pure_funcs: ['console.log'] // 移除console
+          }
+        },
+      }),new OptimizeCSSAssetsPlugin(),
+        new UglifyJsPlugin({
+          uglifyOptions: {
+            compress: false
+          }
+        })
+      ]
     },
     resolve: {
       extensions: ['json', '.js', '.jsx'],
@@ -77,10 +95,10 @@ function generateWebpackConfigForCanister(name, info) {
     },
     plugins: [
         new BundleAnalyzerPlugin(),
-      new HtmlWebpackPlugin({  // Also generate a test.html
-        filename: 'index.html',
-        template: './public/index.html'
-      })
+        new HtmlWebpackPlugin({  // Also generate a test.html
+          filename: 'index.html',
+          template: './public/index.html'
+        })
     ],
     node: {
       fs: 'empty'

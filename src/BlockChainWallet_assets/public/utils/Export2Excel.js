@@ -1,5 +1,5 @@
 /*************这段直接复制就好，看明白最好，不明白也不影响使用*************/
-import XLSX from './xlsx'
+import XLSX from 'xlsx'
 import { saveAs } from 'file-saver'
 
 function s2ab(s) {

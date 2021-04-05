@@ -2,10 +2,6 @@
     width: 30px;
     margin-right: 10px;
 }
-.rewardCopy{
-    cursor: pointer;
-    width: 20px
-}
 .rewardAddress{
     width:400px;
     flex-shrink: 0;

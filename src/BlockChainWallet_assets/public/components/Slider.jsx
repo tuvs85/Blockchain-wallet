@@ -47,7 +47,7 @@ export default function DiscreteSlider({onChange, value}) {
            <Grid container spacing={2} alignItems="center">
                <Grid item xs>
                    <Slider
-                       style={{width: '100%'}}
+                       style={{width: '375px'}}
                        min={marks[0].value}
                        defaultValue={marks[0].value}
                        getAriaValueText={valuetext}
