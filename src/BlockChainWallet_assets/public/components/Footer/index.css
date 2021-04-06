@@ -3,6 +3,7 @@
     margin-top: auto;
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .provided-logo{
@@ -10,6 +11,7 @@
     align-items: center;
 }
 .provided-logo img{
+    margin-left:10px;
     width:60px;
 }
 .provided-logo .dfinity{

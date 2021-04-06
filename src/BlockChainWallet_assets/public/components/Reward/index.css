@@ -1,9 +1,15 @@
-.rewardIcon{
-    width: 30px;
-    margin-right: 10px;
+.Reward{
+
 }
-.rewardAddress{
-    width:400px;
-    flex-shrink: 0;
-    font-size: 18px;
+.Reward ul {
+
+}
+.Reward li {
+    margin: 20px 0;
+}
+.Reward li label{
+    margin:10px 0;
+}
+.Reward li p{
+    margin: 10px 0;
 }

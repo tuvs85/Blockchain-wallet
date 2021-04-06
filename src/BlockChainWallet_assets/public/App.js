@@ -1,17 +1,11 @@
 import React,{useState} from 'react'
 import './App.css';
 import ExportToExcel from './utils/ExportToExcel'
-import Grid from '@material-ui/core/Grid';
-import MuiAlert from '@material-ui/lab/Alert';
-import Button from './components/Button';
 import Footer from './components/Footer'
 import Reward from './components/Reward'
 import SessionStorageData from './components/SessionStorageData'
 // import {createBTCWallet, createETHWallet} from './utils/wallet/create'
 import {createETHWallet} from './utils/wallet/create'
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
 const walletList = ['ETH']
 const createWalletList = {
   createETHWallet
@@ -61,22 +55,31 @@ function App() {
   }
   return (
     <div className="App">
-      <Grid item xs={12} sm={12} md={12}>
-        <h1 className="title">{walletList[0]} Identity Wallet </h1>
+      <div>
+        <h1 className="title">Created Block Chain Wallet
+          <span>V0.0.1</span>
+        </h1>
         <hr/>
-        <Grid container justify="center" direction="column" alignItems="center">
-          <div>
-            <label>Created Number</label>
-            <input type="text" onChange={(e)=>{setCount(e.target.value)}} value={count}/>
+        <div className="Identity">
+          <div className="itemBox">
+            <h2 className="label">Identity Wallet <span>(ETH)</span></h2>
+            <p className="value">The generated accounts are calculated locally, so a maximum of 200 is recommended for a single generation.</p>
           </div>
-        </Grid>
-        <Button loading={loading} onClick={create} total={count} currentCount={currentCount}/>
-        <Alert style={{margin: '20px'}} severity="warning">
-          <p>生成账号为本地计算生成，因此单次生成最大建议200个。</p>
-        </Alert>
+          <div className="itemBox">
+            <h3 className="label">Created Number</h3>
+            <input className="CountInput" type="text" onChange={(e)=>{setCount(e.target.value)}} value={count}/>
+          </div>
+          <div>
+          <button className="createButton" onClick={create} disabled={loading}>
+            {
+                loading ? `Is generating，${currentCount}/${total},Automatically export after generation`:'Generate'
+            }
+          </button>
+          </div>
+        </div>
         <SessionStorageData data={currentAccounts} download={ExportToExcel} />
         <Reward />
-      </Grid>
+      </div>
       <Footer />
     </div>
   );
