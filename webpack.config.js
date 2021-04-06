@@ -94,11 +94,11 @@ function generateWebpackConfigForCanister(name, info) {
      ]
     },
     plugins: [
-        new BundleAnalyzerPlugin(),
+        /*new BundleAnalyzerPlugin(),
         new HtmlWebpackPlugin({  // Also generate a test.html
           filename: 'index.html',
           template: './public/index.html'
-        })
+        })*/
     ],
     node: {
       fs: 'empty'

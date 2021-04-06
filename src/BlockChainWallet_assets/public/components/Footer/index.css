@@ -1,9 +1,15 @@
 .provided{
     height:100px;
     margin-top: auto;
+}
+.provided p{
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.provided .contact{
+    margin-top:10px;
+    color:#333;
 }
 
 .provided-logo{

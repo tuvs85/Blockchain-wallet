@@ -6,7 +6,14 @@ export default function Footer(){
 
     return (
         <div className="provided">
-            Cloud Services Provided by <DfinityLogo />
+            <p>
+                Powered by <DfinityLogo />
+            </p>
+            <p className="contact">
+                <a href="mailto:noshufu@gmail.com" target="_blank">
+                    Contact Me noshufu@gmail.com
+                </a>
+            </p>
         </div>
     )
 }

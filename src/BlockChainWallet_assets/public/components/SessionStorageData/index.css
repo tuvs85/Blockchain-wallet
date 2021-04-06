@@ -1,7 +1,31 @@
-.sessionStorageDataRoot{
-    padding: 20px;
+.sessionStorage{
     max-height: 300px;
     overflow: auto;
+    margin:20px 0;
+}
+.sessionStorage table{
+    width:100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size:14px;
+}
+.sessionStorage table caption{
+    padding:10px;
+}
+.sessionStorage table thead{
+    border-bottom: 1px solid #ddd;
+}
+.sessionStorage table tbody tr:nth-of-type(2n){
+    background: #f9f9f9;
+}
+.sessionStorage table td,.sessionStorage table th{
+    padding: 8px;
+    line-height: 2;
+    vertical-align: top;
+    border-bottom: 1px solid #ddd;
+}
+.sessionStorage button{
+    padding:4px;
 }
 .sessionStorageDataRow{
     display: flex;
