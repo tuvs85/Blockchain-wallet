@@ -12,4 +12,5 @@
 
 # frontend code
 node_modules/
+build/
 dist/
