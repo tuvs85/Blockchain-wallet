@@ -18,7 +18,8 @@
 }
 .provided-logo img{
     margin-left:10px;
-    width:60px;
+    display: block;;
+    width:300px;
 }
 .provided-logo .dfinity{
     margin-left:6px;

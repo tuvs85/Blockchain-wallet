@@ -70,7 +70,7 @@ function generateWebpackConfigForCanister(name, info) {
     },
     output: {
       filename: "[name].js",
-      path: path.join(__dirname, "dist", name),
+      path: path.join(__dirname, "dist"),
     },
 
     // Depending in the language or framework you are using for
@@ -94,11 +94,11 @@ function generateWebpackConfigForCanister(name, info) {
      ]
     },
     plugins: [
-        /*new BundleAnalyzerPlugin(),
+        // new BundleAnalyzerPlugin(),
         new HtmlWebpackPlugin({  // Also generate a test.html
           filename: 'index.html',
           template: './public/index.html'
-        })*/
+        })
     ],
     node: {
       fs: 'empty'

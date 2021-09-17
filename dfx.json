@@ -1,19 +1,11 @@
 {
   "canisters": {
-    "BlockChainWallet": {
-      "main": "src/BlockChainWallet/main.mo",
-      "type": "motoko"
-    },
     "BlockChainWallet_assets": {
-      "dependencies": [
-        "BlockChainWallet"
-      ],
       "frontend": {
-        "entrypoint": "src/BlockChainWallet_assets/public/index.js"
+        "entrypoint": "src/index.js"
       },
       "source": [
-        "src/BlockChainWallet_assets/assets",
-        "dist/BlockChainWallet_assets/"
+        "dist/"
       ],
       "type": "assets"
     }
